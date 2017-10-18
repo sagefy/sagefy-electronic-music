@@ -1,4 +1,4 @@
-# sagefy-web-audio-examples
+# Sagefy - Introduction to Electronic Music - Examples
 🎧 Electronic Music Examples Using the Web Audio API
 
 All content released under [Apache 2](http://www.apache.org/licenses/LICENSE-2.0) and [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
@@ -6,7 +6,7 @@ All content released under [Apache 2](http://www.apache.org/licenses/LICENSE-2.0
 Like the videos and examples you see here?
 You can experience all of this with multiple choice questions in [Sagefy](https://sagefy.org/subjects/JAFGYFWhILcsiByyH2O9frcU/landing) that adapt to you.
 
-- Foundation
+- **Foundation**
   - **Unit**: Electronic Music
     - [Video](https://youtu.be/VSwjp7Zt1GY)
     - _Example_: Electronic v Acoustic
@@ -33,7 +33,7 @@ You can experience all of this with multiple choice questions in [Sagefy](https:
   - **Unit**: Complex Waves
     - [Video](https://youtu.be/qAojF80nwsM)
     - _Example_: Building a Triangle Wave
-- Creating Sound
+- **Creating Sound**
   - **Unit**: Oscillators
     - [Video](https://youtu.be/XVSTrQktys8)
     - _Example_: Sine, Triangle, Square, Rectangle, and Sawtooth
@@ -52,7 +52,7 @@ You can experience all of this with multiple choice questions in [Sagefy](https:
   - **Unit**: Samplers
     - [Video](https://youtu.be/apT5oXr9sPg)
     - _Example_: Drum Machine: Reverse, Loop, Speed
-- Changing Sound
+- **Changing Sound**
   - **Unit**: Filters
     - [Video](https://youtu.be/icRtqXy7UQk)
     - _Example_: Low-Pass
@@ -107,7 +107,7 @@ You can experience all of this with multiple choice questions in [Sagefy](https:
       Ratio and depth
       decay time
       Room size, density, frequency, and panning
-- Systems
+- **Systems**
   - **Unit**: Fast Fourier Transform
     - [Video](https://youtu.be/K8XAKz68kH4)
   - **Unit**: Spatialization
