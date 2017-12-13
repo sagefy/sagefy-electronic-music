@@ -1,13 +1,32 @@
 <!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ page.title }} – Sagefy Electronic Music</title>
+<title>Example: {{ page.title }}</title>
 <link href="https://fonts.googleapis.com/css?family=Rubik:400,400i,500,500i" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
 <link rel="stylesheet" href="/index.css">
+<style>
+  body {
+    background: #ccc;
+  }
+  .desc {
+    margin-top: 0;
+  }
+  main {
+    width: 754px;
+    height: 424px;
+    background: white;
+  }
+  .half {
+    width: 50%;
+    display: inline-block;
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/0.12.10/Tone.min.js"></script>
 <body>
   <main>
     <h1>{{ page.title }}</h1>
+    <p class="desc">{{ page.description }}</p>
     {{ content }}
   </main>
   <!-- Google Analytics -->

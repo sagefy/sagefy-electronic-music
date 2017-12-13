@@ -1,0 +1,63 @@
+---
+layout: example
+title: Amplitude &amp; Volume
+description: As amplitude increases, the waveform grows larger and the meter excites.
+---
+
+<!-- https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Controlling_multiple_parameters_with_ConstantSourceNode -->
+<p>
+  <button>Play</button>
+  <input type="range" min="-20" max="20" step="1" value="0" />
+  Gain: <span class="gain">0</span>db
+</p>
+<div>
+  <div class="half">
+    <strong>Waveform</strong>
+    <!--https://tonejs.github.io/docs/r11/Analyser-->
+    <!--https://github.com/Tonejs/Tone.js/blob/master/examples/analysis.html-->
+  </div><div class="half">
+    <strong>Meter</strong>
+    <!--https://tonejs.github.io/docs/r11/Meter-->
+    <!--https://github.com/Tonejs/Tone.js/blob/master/examples/meter.html-->
+  </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function(event) {
+  const AudioContext = window.AudioContext || window.webkitAudioContext
+  if (!AudioContext) {
+    document.querySelector('main').innerHTML = 'No Web Audio API. Please use a recent browser.'
+    return
+  }
+  let gain = 0
+  let on = false
+  const note = 'C4'
+  const slider = document.querySelector('input[type="range"]')
+  const gainDisplay = document.querySelector('.gain')
+  const button = document.querySelector('button')
+  const synth = new Tone.Synth({
+    oscillator: {
+      type: 'square',
+    },
+    envelope: {
+      attack: 0.1,
+      decay: 0.2,
+      sustain: 0.5,
+      release: 0.5,
+    },
+    volume: gain,
+  }).toMaster()
+  slider.addEventListener('change', (e) => {
+    gainDisplay.innerText = gain = e.target.value
+    synth.volume.rampTo(gain, 0.5)
+  })
+  button.addEventListener('click', () => {
+    if (on) {
+      synth.triggerRelease()
+    } else {
+      synth.triggerAttack(note)
+    }
+    on = !on
+    button.innerHTML = on && 'Pause' || 'Play'
+  })
+})
+</script>
