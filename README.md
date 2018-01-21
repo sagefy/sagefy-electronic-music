@@ -13,7 +13,7 @@ You can experience all of this with multiple choice questions that adapt to you.
     - _Example_: Synthesis, Sampling, Analysis, Modification, Reproduction
   - **Unit**: Sound Parameters
     - [Video](https://youtu.be/9nlWEA-DAGU)
-    - _Example_: Amplitude & Decibles -> Volume
+    - _Example_: [Amplitude & Decibles -> Volume](http://em.sagefy.org/examples/amplitude-and-volume)
     - _Example_: Frequency & Hertz -> Pitch
     - _Example_: Duration -> Rhythm
     - _Example_: Phase and Radians -> Space
