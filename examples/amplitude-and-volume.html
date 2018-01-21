@@ -4,60 +4,111 @@ title: Amplitude &amp; Volume
 description: As amplitude increases, the waveform grows larger and the meter excites.
 ---
 
-<!-- https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Controlling_multiple_parameters_with_ConstantSourceNode -->
+<!-- Based on:
+  https://tonejs.github.io/docs/r11/Analyser
+  https://github.com/Tonejs/Tone.js/blob/master/examples/analysis.html
+  https://tonejs.github.io/examples/#meter
+  https://github.com/Tonejs/Tone.js/blob/master/examples/meter.html
+-->
+
+<style>
+.half {
+  width: 50%;
+  display: inline-block;
+}
+canvas {
+  display: block;
+  width: 350px;
+  height: 120px;
+}
+</style>
+
 <p>
   <button>Play</button>
-  <input type="range" min="-20" max="20" step="1" value="0" />
+  <input type="range" min="-20" max="0" step="1" value="0" />
   Gain: <span class="gain">0</span>db
 </p>
 <div>
   <div class="half">
     <strong>Waveform</strong>
-    <!--https://tonejs.github.io/docs/r11/Analyser-->
-    <!--https://github.com/Tonejs/Tone.js/blob/master/examples/analysis.html-->
+    <canvas id="waveform"></canvas>
   </div><div class="half">
     <strong>Meter</strong>
-    <!--https://tonejs.github.io/docs/r11/Meter-->
-    <!--https://github.com/Tonejs/Tone.js/blob/master/examples/meter.html-->
+    <canvas id="meter"></canvas>
   </div>
 </div>
 <script>
-document.addEventListener("DOMContentLoaded", function(event) {
-  const AudioContext = window.AudioContext || window.webkitAudioContext
-  if (!AudioContext) {
-    document.querySelector('main').innerHTML = 'No Web Audio API. Please use a recent browser.'
-    return
-  }
-  let gain = 0
-  let on = false
-  const note = 'C4'
-  const slider = document.querySelector('input[type="range"]')
-  const gainDisplay = document.querySelector('.gain')
-  const button = document.querySelector('button')
-  const synth = new Tone.Synth({
-    oscillator: {
-      type: 'square',
-    },
-    envelope: {
-      attack: 0.1,
-      decay: 0.2,
-      sustain: 0.5,
-      release: 0.5,
-    },
-    volume: gain,
-  }).toMaster()
-  slider.addEventListener('change', (e) => {
-    gainDisplay.innerText = gain = e.target.value
-    synth.volume.rampTo(gain, 0.5)
-  })
-  button.addEventListener('click', () => {
-    if (on) {
-      synth.triggerRelease()
-    } else {
-      synth.triggerAttack(note)
+  document.addEventListener("DOMContentLoaded", function(event) {
+    const AudioContext = window.AudioContext || window.webkitAudioContext
+    if (!AudioContext) {
+      document.querySelector('main').innerHTML = 'No Web Audio API. Please use a recent browser.'
+      return
     }
-    on = !on
-    button.innerHTML = on && 'Pause' || 'Play'
+    let on = false
+    const note = 'C4'
+    const slider = document.querySelector('input[type="range"]')
+    const gainDisplay = document.querySelector('.gain')
+    const button = document.querySelector('button')
+    const waveform = new Tone.Waveform(1024)
+    const meter = new Tone.Meter()
+    const synth = new Tone.Synth({
+      oscillator: {
+        type: 'square',
+      },
+      envelope: {
+        attack: 0.1,
+        decay: 0.2,
+        sustain: 0.5,
+        release: 0.5,
+      },
+      volume: 0,
+    }).fan(waveform, meter).toMaster()
+    slider.addEventListener('change', (e) => {
+      gainDisplay.innerText = e.target.value
+      synth.volume.rampTo(e.target.value, 0.5)
+    })
+    button.addEventListener('click', () => {
+      if (on) {
+        synth.triggerRelease()
+      } else {
+        synth.triggerAttack(note)
+      }
+      on = !on
+      button.innerHTML = on && 'Pause' || 'Play'
+    })
+    const meterContext = document.querySelector('#meter').getContext('2d')
+    const waveContext = document.querySelector('#waveform').getContext('2d')
+    const canvasWidth = 350
+    const canvasHeight = 120
+    function drawWaveform() {
+      const waveformValues = waveform.getValue()
+      waveContext.clearRect(0, 0, canvasWidth, canvasHeight)
+      waveContext.moveTo(0, (waveformValues[0] / 255) * canvasHeight)
+      waveContext.beginPath()
+      waveContext.lineJoin = "round"
+      waveContext.lineWidth = 3
+      waveContext.strokeStyle = "#a09e91"
+      for (var i = 1, len = waveformValues.length; i < len; i++){
+        var val = (waveformValues[i] + 1) / 2
+        var x = canvasWidth * (i / len)
+        var y = val * canvasHeight
+        waveContext.lineTo(x, y)
+      }
+      waveContext.stroke()
+    }
+    function drawMeter() {
+      const level = Tone.dbToGain(meter.getLevel())
+      meterContext.clearRect(0, 0, canvasWidth, canvasHeight)
+      meterContext.fillStyle = "#c57c8b"
+      meterContext.fillRect(0, 0, canvasWidth, canvasHeight)
+      meterContext.fillStyle = "white"
+      meterContext.fillRect(canvasWidth * (level / 2.82), 0, canvasWidth, canvasHeight)
+    }
+    function loop(){
+      requestAnimationFrame(loop)
+      drawWaveform()
+      drawMeter()
+    }
+    loop()
   })
-})
 </script>
