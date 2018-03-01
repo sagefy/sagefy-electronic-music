@@ -1,0 +1,82 @@
+---
+layout: example
+title: Frequency &amp; Pitch
+description: As frequency increases, the waveform speeds up and the pitch raises.
+---
+
+<!-- Based on:
+  https://tonejs.github.io/docs/r11/Analyser
+  https://github.com/Tonejs/Tone.js/blob/master/examples/analysis.html
+-->
+
+<style>
+canvas {
+  display: block;
+  width: 700px;
+  height: 150px;
+}
+</style>
+
+<p>
+  <button data-note="C2">Play 65.41Hz</button>
+  <button data-note="C4">Play 261.63Hz</button>
+  <button data-note="C6">Play 1046.50Hz</button>
+  <button data-note="C8">Play 4186.01Hz</button>
+</p>
+<div>
+  <strong>Waveform</strong>
+  <canvas id="waveform"></canvas>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    const AudioContext = window.AudioContext || window.webkitAudioContext
+    if (!AudioContext) {
+      document.querySelector('main').innerHTML = 'No Web Audio API. Please use a recent browser.'
+      return
+    }
+    const buttons = document.querySelectorAll('button')
+    const waveform = new Tone.Waveform(1024)
+    const synth = new Tone.Synth({
+      oscillator: {
+        type: 'square',
+      },
+      envelope: {
+        attack: 0.1,
+        decay: 0.2,
+        sustain: 0.5,
+        release: 0.5,
+      },
+      volume: 0,
+    }).fan(waveform).toMaster()
+    buttons.forEach(button => {
+      const note = button.dataset.note
+      button.addEventListener('click', () => {
+        synth.triggerAttackRelease(note, 1)
+      })
+    })
+    const waveContext = document.querySelector('#waveform').getContext('2d')
+    const canvasWidth = 700
+    const canvasHeight = 150
+    function drawWaveform() {
+      const waveformValues = waveform.getValue()
+      waveContext.clearRect(0, 0, canvasWidth, canvasHeight)
+      waveContext.moveTo(0, (waveformValues[0] / 255) * canvasHeight)
+      waveContext.beginPath()
+      waveContext.lineJoin = "round"
+      waveContext.lineWidth = 3
+      waveContext.strokeStyle = "#a09e91"
+      for (var i = 1, len = waveformValues.length; i < len; i++){
+        var val = (waveformValues[i] + 1) / 2
+        var x = canvasWidth * (i / len)
+        var y = val * canvasHeight
+        waveContext.lineTo(x, y)
+      }
+      waveContext.stroke()
+    }
+    function loop(){
+      requestAnimationFrame(loop)
+      drawWaveform()
+    }
+    loop()
+  })
+</script>
