@@ -14,10 +14,10 @@ You can experience all of this with multiple choice questions that adapt to you.
   - **Unit**: Sound Parameters
     - [Video](https://youtu.be/9nlWEA-DAGU)
     - _Example_: [Amplitude & Decibels -> Volume](http://em.sagefy.org/examples/amplitude-and-volume)
-    - _Example_: Frequency & Hertz -> Pitch
-    - _Example_: Duration -> Rhythm
+    - _Example_: [Frequency & Hertz -> Pitch](http://em.sagefy.org/examples/frequency-and-pitch)
+    - _Example_: [Duration -> Rhythm](http://em.sagefy.org/examples/duration-and-rhythm)
     - _Example_: Phase and Radians -> Space
-    - _Example_: Spectrum -> Color
+    - _Example_: [Spectrum -> Color](http://em.sagefy.org/examples/spectrum-and-color)
   - **Unit**: Human Hearing
     - [Video](https://youtu.be/3K7fYHczldY)
     - _Example_: Frequency, from 20hz to 20khz
