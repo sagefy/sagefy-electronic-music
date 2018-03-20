@@ -1,0 +1,168 @@
+---
+layout: example
+title: Duration &amp; Rhythm
+description: Patterns in duration create our sense of rhythm.
+---
+
+<style>
+.wrapper {
+  margin: 40px -10px 0;
+}
+.half {
+  width: 50%;
+  padding: 0 10px;
+  display: inline-block;
+  vertical-align: top;
+}
+canvas {
+  display: block;
+  width: 350px;
+  height: 120px;
+}
+.low, .mid, .high {
+  height: 20px;
+  margin: 0 -4px;
+}
+.bar {
+  height: 10px;
+  display: inline-block;
+  padding: 0 4px;
+}
+.bar:before {
+  content: ' ';
+  background: #a09e91;
+  display: block;
+  border-radius: 2px;
+  width: 100%;
+  height: 100%;
+}
+.bar.on:before {
+  background: #6fa6d4;
+}
+.low .bar {
+  width: 50%;
+}
+.mid .bar {
+  width: 25%;
+}
+.high .bar {
+  width: 12.5%;
+}
+</style>
+
+<p>
+  <button data-range="low">Play Low</button>
+  <button data-range="mid">Play Mid</button>
+  <button data-range="high">Play High</button>
+</p>
+<div class="wrapper">
+  <div class="track half">
+    <strong>Track</strong>
+    <div class="low">
+      <span class="bar"></span><span class="bar"></span>
+    </div>
+    <div class="mid">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </div>
+    <div class="high">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </div>
+  </div><div class="half">
+    <strong>Waveform</strong>
+    <canvas id="waveform"></canvas>
+  </div>
+</div>
+<script>
+  function ucFirst(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  NodeList.prototype.forEach = Array.prototype.forEach
+  document.addEventListener("DOMContentLoaded", function(event) {
+    const AudioContext = window.AudioContext || window.webkitAudioContext
+    if (!AudioContext) {
+      document.querySelector('main').innerHTML = 'No Web Audio API. Please use a recent browser.'
+      return
+    }
+    const buttons = document.querySelectorAll('button')
+    const waveform = new Tone.Waveform(1024)
+    const note = 'C4'
+    const synthConfig = {
+      oscillator: {
+        type: 'square'
+      },
+      envelope: {
+        attack: 0.1,
+        decay: 0.2,
+        sustain: 0.5,
+        release: 0.5,
+      },
+      volume: 0,
+    }
+    const synths = ['low', 'mid', 'high'].reduce((sum, kind) =>
+      Object.assign(sum, {
+        [kind]: new Tone.Synth(
+          Object.assign({}, synthConfig)
+        ).fan(waveform).toMaster()
+      })
+    , {})
+    const synthStatus = { low: false, mid: false, high: false }
+    buttons.forEach(button => {
+      const range = button.dataset.range
+      button.addEventListener('click', () => {
+        synthStatus[range] = !synthStatus[range]
+        button.innerHTML = (synthStatus[range] ? 'Pause' : 'Play') + ' ' + ucFirst(range)
+      })
+    })
+    let currBeat = Infinity
+    function updateStatus(time) {
+      const foundBeat = Math.floor(time / 500) % 8
+      if (foundBeat !== currBeat) {
+        if (foundBeat % 4 === 0) {
+          document.querySelectorAll('.low .bar').forEach(el => el.classList.remove('on'))
+          if(synthStatus.low) {
+            synths.low.triggerAttackRelease('C3', 2 - 0.2)
+            document.querySelectorAll('.low .bar')[Math.floor(foundBeat / 4)].classList.add('on')
+          }
+        }
+        if (foundBeat % 2 === 0) {
+          document.querySelectorAll('.mid .bar').forEach(el => el.classList.remove('on'))
+          if (synthStatus.mid) {
+            synths.mid.triggerAttackRelease('E4', 1 - 0.2)
+            document.querySelectorAll('.mid .bar')[Math.floor(foundBeat / 2)].classList.add('on')
+          }
+        }
+        document.querySelectorAll('.high .bar').forEach(el => el.classList.remove('on'))
+        if (synthStatus.high) {
+          synths.high.triggerAttackRelease('D5', 0.5 - 0.2)
+          document.querySelectorAll('.high .bar')[foundBeat].classList.add('on')
+        }
+      }
+      currBeat = foundBeat
+    }
+    const waveContext = document.querySelector('#waveform').getContext('2d')
+    const canvasWidth = 350
+    const canvasHeight = 120
+    function drawWaveform() {
+      const waveformValues = waveform.getValue()
+      waveContext.clearRect(0, 0, canvasWidth, canvasHeight)
+      waveContext.moveTo(0, (waveformValues[0] / 255) * canvasHeight)
+      waveContext.beginPath()
+      waveContext.lineJoin = "round"
+      waveContext.lineWidth = 3
+      waveContext.strokeStyle = "#a09e91"
+      for (var i = 1, len = waveformValues.length; i < len; i++){
+        var val = (waveformValues[i] + 1) / 2
+        var x = canvasWidth * (i / len)
+        var y = val * canvasHeight
+        waveContext.lineTo(x, y)
+      }
+      waveContext.stroke()
+    }
+    function loop(time){
+      requestAnimationFrame(loop)
+      updateStatus(time)
+      drawWaveform()
+    }
+    loop()
+  })
+</script>
