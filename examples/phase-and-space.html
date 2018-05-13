@@ -1,0 +1,98 @@
+---
+layout: example
+title: Phase &amp; Space
+description: As the phase changes between two waves, the sound's color and space changes.
+---
+
+<!-- Based on:
+  https://tonejs.github.io/docs/r11/Analyser
+  https://github.com/Tonejs/Tone.js/blob/master/examples/analysis.html
+-->
+
+<style>
+canvas {
+  display: block;
+  width: 700px;
+  height: 150px;
+}
+</style>
+
+<p>
+  <em>Offset:</em>
+  <button data-degrees="15">Play 15&deg;</button>
+  <button data-degrees="60">Play 60&deg;</button>
+  <button data-degrees="90">Play 90&deg;</button>
+  <button data-degrees="120">Play 120&deg;</button>
+  <button data-degrees="179">Play 179&deg;</button>
+</p>
+<div>
+  <strong>Waveforms</strong>: Blue Left, Red Right
+  <canvas id="waveform"></canvas>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    const AudioContext = window.AudioContext || window.webkitAudioContext
+    if (!AudioContext) {
+      document.querySelector('main').innerHTML = 'No Web Audio API. Please use a recent browser.'
+      return
+    }
+    const buttons = document.querySelectorAll('button')
+    const waveform1 = new Tone.Waveform(1024)
+    const waveform2 = new Tone.Waveform(1024)
+
+    const config = {
+      oscillator: {
+        type: 'sawtooth',
+      },
+      envelope: {
+        attack: 0.1,
+        decay: 0.2,
+        sustain: 0.5,
+        release: 0.5,
+      },
+      volume: 0,
+    }
+
+    const pan1 = new Tone.Panner(-1).toMaster()
+    const pan2 = new Tone.Panner(1).toMaster()
+    const synth1 = new Tone.Synth(config).fan(pan1, waveform1).toMaster()
+    const synth2 = new Tone.Synth(config).fan(pan2, waveform2).toMaster()
+
+
+    buttons.forEach(button => {
+      const degrees = Number(button.dataset.degrees)
+      button.addEventListener('click', () => {
+        synth2.oscillator.phase = degrees
+        synth1.triggerAttackRelease('C4', 1)
+        synth2.triggerAttackRelease('C4', 1)
+      })
+    })
+    const waveContext = document.querySelector('#waveform').getContext('2d')
+    const canvasWidth = 350
+    const canvasHeight = 150
+
+    function drawWaveform(waveform, waveContext, color) {
+      const waveformValues = waveform.getValue()
+      // waveContext.clearRect(0, 0, canvasWidth, canvasHeight)
+      waveContext.moveTo(0, (waveformValues[0] / 255) * canvasHeight)
+      waveContext.beginPath()
+      waveContext.lineJoin = "round"
+      waveContext.lineWidth = 3
+      waveContext.strokeStyle = color
+      for (var i = 1, len = waveformValues.length; i < len; i++){
+        var val = (waveformValues[i] + 1) / 2
+        var x = canvasWidth * (i / len)
+        var y = val * canvasHeight
+        waveContext.lineTo(x, y)
+      }
+      waveContext.stroke()
+    }
+    function loop(){
+      requestAnimationFrame(loop)
+      waveContext.clearRect(0, 0, canvasWidth, canvasHeight)
+      drawWaveform(waveform1, waveContext, '#33c')
+      drawWaveform(waveform2, waveContext, '#c33')
+    }
+    loop()
+  })
+</script>
