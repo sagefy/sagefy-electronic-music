@@ -4,7 +4,7 @@
 All content released under [Apache 2](http://www.apache.org/licenses/LICENSE-2.0) and [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 Like the videos and examples you see here?
-You can experience all of this with multiple choice questions that adapt to you. [Check out Sagefy](https://sagefy.org/subjects/JAFGYFWhILcsiByyH2O9frcU/landing)!
+You can experience all of this with multiple choice questions that adapt to you. [Check out Sagefy](https://sagefy.org/subjects/UIe3mx3UTQKHDG2zLyHI5w/landing)!
 
 - **Foundation**
   - **Unit**: Electronic Music
@@ -14,10 +14,10 @@ You can experience all of this with multiple choice questions that adapt to you.
   - **Unit**: Sound Parameters
     - [Video](https://youtu.be/9nlWEA-DAGU)
     - _Example_: [Amplitude & Decibels -> Volume](http://em.sagefy.org/examples/amplitude-and-volume)
-    - _Example_: Frequency & Hertz -> Pitch
-    - _Example_: Duration -> Rhythm
+    - _Example_: [Frequency & Hertz -> Pitch](http://em.sagefy.org/examples/frequency-and-pitch)
+    - _Example_: [Duration -> Rhythm](http://em.sagefy.org/examples/duration-and-rhythm)
     - _Example_: Phase and Radians -> Space
-    - _Example_: Spectrum -> Color
+    - _Example_: [Spectrum -> Color](http://em.sagefy.org/examples/spectrum-and-color)
   - **Unit**: Human Hearing
     - [Video](https://youtu.be/3K7fYHczldY)
     - _Example_: Frequency, from 20hz to 20khz
