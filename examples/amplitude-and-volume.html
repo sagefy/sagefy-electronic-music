@@ -18,7 +18,7 @@ description: As amplitude increases, the waveform grows larger and the meter exc
 }
 canvas {
   display: block;
-  width: 337px;
+  width: 300px;
   height: 120px;
 }
 </style>
@@ -78,7 +78,7 @@ canvas {
     })
     const meterContext = document.querySelector('#meter').getContext('2d')
     const waveContext = document.querySelector('#waveform').getContext('2d')
-    const canvasWidth = 337
+    const canvasWidth = 300
     const canvasHeight = 120
     function drawWaveform() {
       const waveformValues = waveform.getValue()
