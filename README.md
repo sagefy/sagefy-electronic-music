@@ -1,8 +1,3 @@
----
-layout: docs
-title: README
----
-
 # Sagefy - Introduction to Electronic Music - Examples
 🎧 Electronic Music Examples Using the Web Audio API
 
