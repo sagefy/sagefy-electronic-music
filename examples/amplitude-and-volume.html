@@ -18,8 +18,8 @@ description: As amplitude increases, the waveform grows larger and the meter exc
 }
 canvas {
   display: block;
-  width: 300px;
-  height: 120px;
+  width: 276px;
+  height: 150px;
 }
 </style>
 
@@ -78,8 +78,8 @@ canvas {
     })
     const meterContext = document.querySelector('#meter').getContext('2d')
     const waveContext = document.querySelector('#waveform').getContext('2d')
-    const canvasWidth = 300
-    const canvasHeight = 120
+    const canvasWidth = 276
+    const canvasHeight = 150
     function drawWaveform() {
       const waveformValues = waveform.getValue()
       waveContext.clearRect(0, 0, canvasWidth, canvasHeight)
@@ -87,7 +87,7 @@ canvas {
       waveContext.beginPath()
       waveContext.lineJoin = "round"
       waveContext.lineWidth = 3
-      waveContext.strokeStyle = "#a09e91"
+      waveContext.strokeStyle = "#697893"
       for (var i = 1, len = waveformValues.length; i < len; i++){
         var val = (waveformValues[i] + 1) / 2
         var x = canvasWidth * (i / len)
@@ -99,9 +99,9 @@ canvas {
     function drawMeter() {
       const level = Tone.dbToGain(meter.getLevel())
       meterContext.clearRect(0, 0, canvasWidth, canvasHeight)
-      meterContext.fillStyle = "#c57c8b"
+      meterContext.fillStyle = "#3e4759"
       meterContext.fillRect(0, 0, canvasWidth, canvasHeight)
-      meterContext.fillStyle = "white"
+      meterContext.fillStyle = "#9facc6"
       meterContext.fillRect(canvasWidth * (level / 2.82), 0, canvasWidth, canvasHeight)
     }
     function loop(){
